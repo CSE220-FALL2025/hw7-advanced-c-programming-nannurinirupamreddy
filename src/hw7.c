@@ -306,7 +306,7 @@ char* infix2postfix_sf(char *infix) {
     
     int length = strlen(infix);
 
-    char *postfix = malloc(len * 2 + 1);
+    char *postfix = malloc(length * 2 + 1);
 
     if (postfix == NULL) {
         return NULL;
