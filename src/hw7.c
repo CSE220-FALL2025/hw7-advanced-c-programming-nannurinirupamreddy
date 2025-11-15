@@ -315,7 +315,9 @@ char* infix2postfix_sf(char *infix) {
     for (int i = 0; i < length; i++) {
         char c = infix[i];
         
-        if (isspace(c)) continue;
+        if (isspace(c)) {
+            continue;
+        }
         
         if (isalpha(c)) {
             postfix[out_idx++] = c;
@@ -379,10 +381,14 @@ void free_matrix_stack(MatrixStack *stack) {
 }
 
 matrix_sf* evaluate_expr_sf(char name, char *expr, bst_sf *root) {
-    if (!expr || !root) return NULL;
+    if (expr == NULL || root == NULL) {
+        return NULL;
+    }
     
     char *postfix = infix2postfix_sf(expr);
-    if (!postfix) return NULL;
+    if (postfix == NULL) {
+        return NULL;
+    }
     
     MatrixStack *stack = create_matrix_stack(strlen(postfix) + 1);
 
@@ -391,7 +397,9 @@ matrix_sf* evaluate_expr_sf(char name, char *expr, bst_sf *root) {
         
         if (isalpha(c)) {
             matrix_sf *mat = find_bst_sf(c, root);
-            if (mat) push_matrix(stack, mat);
+            if (mat) {
+                push_matrix(stack, mat);
+            }
         } else if (c == '\'') {
             matrix_sf *mat = pop_matrix(stack);
             if (mat) {
