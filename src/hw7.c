@@ -1,3 +1,7 @@
+/**
+ * Nirupam Reddy Nannuri, 116194149
+ */
+
 #include "hw7.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -317,9 +321,7 @@ char* infix2postfix_sf(char *infix) {
         
         if (isspace(c)) {
             continue;
-        }
-        
-        if (isalpha(c)) {
+        } else if (isalpha(c)) {
             postfix[out_idx++] = c;
         } else if (c == '(') {
             push_char(stack, c);
@@ -330,7 +332,7 @@ char* infix2postfix_sf(char *infix) {
             if (!is_empty_char(stack)) {
                 pop_char(stack);
             }
-        } else if (c == '+' || c == '*' || c == '\'') {
+        } else {
             while (!is_empty_char(stack) && peek_char(stack) != '(' && precedence(peek_char(stack)) >= precedence(c)) {
                 postfix[out_idx++] = pop_char(stack);
             }
@@ -386,6 +388,7 @@ matrix_sf* evaluate_expr_sf(char name, char *expr, bst_sf *root) {
     }
     
     char *postfix = infix2postfix_sf(expr);
+
     if (postfix == NULL) {
         return NULL;
     }
@@ -438,10 +441,15 @@ matrix_sf* evaluate_expr_sf(char name, char *expr, bst_sf *root) {
 }
 
 matrix_sf* execute_script_sf(char *filename) {
-    if (!filename) return NULL;
+    if (filename == NULL) {
+        return NULL;
+    }
     
     FILE *file = fopen(filename, "r");
-    if (!file) return NULL;
+
+    if (file == NULL) {
+        return NULL;
+    }
     
     bst_sf *root = NULL;
     matrix_sf *last_matrix = NULL;
@@ -451,15 +459,27 @@ matrix_sf* execute_script_sf(char *filename) {
     while (getline(&line, &max_line_size, file) != -1) {
         char *p = line;
 
-        while (*p && isspace(*p)) p++;
-        if (!*p) continue;
+        while (*p && isspace(*p)) {
+            p++;
+        }
+
+        if (!*p) {
+            continue;
+        }
 
         char mat_name = *p++;
 
-        while (*p && *p != '=') p++;
-        if (*p == '=') p++;
+        while (*p && *p != '=') {
+            p++;
+        }
 
-        while (*p && isspace(*p)) p++;
+        if (*p == '=') {
+            p++;
+        }
+
+        while (*p && isspace(*p)) {
+            p++;
+        }
 
         if (isdigit(*p)) {
             matrix_sf *mat = create_matrix_sf(mat_name, p);
@@ -470,7 +490,9 @@ matrix_sf* execute_script_sf(char *filename) {
         } else {
             char *expr_start = p;
             char *expr_end = expr_start;
-            while (*expr_end && *expr_end != '\n') expr_end++;
+            while (*expr_end && *expr_end != '\n') {
+                expr_end++;
+            }
             *expr_end = '\0';
             
             matrix_sf *mat = evaluate_expr_sf(mat_name, expr_start, root);
