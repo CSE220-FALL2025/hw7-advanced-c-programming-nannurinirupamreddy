@@ -131,10 +131,6 @@ matrix_sf* mult_mats_sf(const matrix_sf *mat1, const matrix_sf *mat2) {
         }
     }
 
-    // unsigned int i = 0;
-    // unsigned int j = 0;
-    // unsigned int k = 0;
-    
     return result;
 }
 
@@ -464,7 +460,6 @@ matrix_sf* execute_script_sf(char *filename) {
                 last_matrix = mat;
             }
         } else {
-            // Formula
             char *expr_start = p;
             char *expr_end = expr_start;
             while (*expr_end && *expr_end != '\n') expr_end++;
@@ -482,14 +477,12 @@ matrix_sf* execute_script_sf(char *filename) {
     fclose(file);
 
     if (last_matrix) {
-        matrix_sf *result = malloc(sizeof(matrix_sf) + 
-                                   last_matrix->num_rows * last_matrix->num_cols * sizeof(int));
+        matrix_sf *result = malloc(sizeof(matrix_sf) + last_matrix->num_rows * last_matrix->num_cols * sizeof(int));
         if (result) {
             result->name = last_matrix->name;
             result->num_rows = last_matrix->num_rows;
             result->num_cols = last_matrix->num_cols;
-            memcpy(result->values, last_matrix->values, 
-                   last_matrix->num_rows * last_matrix->num_cols * sizeof(int));
+            memcpy(result->values, last_matrix->values, last_matrix->num_rows * last_matrix->num_cols * sizeof(int));
         }
         free_bst_sf(root);
         return result;
